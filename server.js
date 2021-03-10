@@ -8,10 +8,10 @@ function readXls() {
     let list = xlsx.parse("./edu.xlsx");
     console.log(list);
 }
-writeXls();
+// writeXls();
 function writeXls() {
     let data = [];
-    for (let i = 1; i < 900001; i++) {
+    for (let i = 1; i < 901; i++) {
         data.push([i, 10 + i, '上海']);
     }
     let xlsxObj = [
@@ -23,7 +23,7 @@ function writeXls() {
     fs.writeFileSync('./edu0.xlsx',xlsx.build(xlsxObj));
     console.log('success');
 }
-
+mkdir()
 function mkdir() {
     let con = {"con":"HelloWorld"};
     fs.writeFile('./6114.json',JSON.stringify(con), { 'flag':1 }, function(err) {

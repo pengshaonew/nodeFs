@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>test000</title>
+    <script src="https://probe.bjmantis.net/chat/jquery-1.12.4.min.js"></script>
+    <!-- <script src="https://test.bjmantis.net/chat/js/dist/mantis.min.js?3401#5fc6f7bbdc4cec2b565684db"></script> -->
+    <script src="https://test.bjmantis.net/chat/js/dist/mantis.min.js?7011#5ea96e4cdc4cec4b85b73e68"></script>
+    <!-- <script src="https://chatn4.bjmantis.net/chat/js/dist/mantis.min.js?3077#5fbe197c9ef51927e922ad28"></script> -->
+    <!-- <script src="https://test.bjmantis.net/chat/js/dist/mantis.min.js?3401#602e2e1edc4cec3662f24140"></script> -->
+    <script>
+        function invitationFun() {
+            alert('邀请框');
+        }
+        /* mantis.pageparam = JSON.stringify({
+            "key1": "val1",
+            "key2": "val2"
+        });
+        var fake = true; */
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .msgList{
+            min-height: 100px;
+            padding:20px;
+        }
+
+        .msgList .msg{
+            margin-bottom:10px;
+        }
+
+        .msgList .msg span{
+            background: #0caf5c;
+            color:#fff;
+            padding:5px;
+            border-radius: 3px;
+            margin:15px;
+        }
+
+        .msgList .msgL {
+            text-align: left;
+        }
+
+        .msgList .msgR {
+            text-align: right;
+        }
+
+        footer{
+            display: flex;
+        }
+
+        .chatwindow {
+            border: 1px solid #ccc;
+            height: 30px;
+            flex:1;
+        }
+
+        #sendMsg{
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+<div class="userLogin">
+    <input type="text" id='userName'> <button id='login'>登录</button>
+</div>
+<!-- <img src="./img/head.png" alt=""> -->
+<footer>
+    <div contenteditable="plaintext-only" class="chatwindow" id="chatwindow"></div>
+    <button onclick="sendMsg()" id="sendMsg">发送</button>
+</footer>
+<div class="msgList"></div>
+<!-- <button
+    onclick="mantisChat('https://test.bjmantis.net/chat/js/dist/mantis.min.js?3401#602e2e1edc4cec3662f24140')">发送至1</button>
+<button
+    onclick="mantisChat('https://test.bjmantis.net/chat/js/dist/mantis.min.js?3401#600bce690f810241b4d0da28')">发送至2</button>
+<button
+    onclick="mantisChat('https://test.bjmantis.net/chat/js/dist/mantis.min.js?3401#602e2e1edc4cec3662f24140')">发送至1</button>
+<button
+    onclick="mantisChat('https://test.bjmantis.net/chat/js/dist/mantis.min.js?3401#600bce690f810241b4d0da28')">发送至2</button> -->
+<script>
+    function mantisChat(probeStr) {
+        mantis.switchProbe(probeStr);
+    }
+</script>
+<script type="text/javascript">
+    if (sessionStorage.userName) {
+        $('.userLogin').remove();
+    }
+    $('#login').click(function() {
+        let userName = $('#userName').val();
+        if (userName) {
+            sessionStorage.userName = userName;
+            $('#userName').val('');
+            $('.userLogin').remove();
+        }
+    });
+    $('.chatwindow').keydown(function(e) {
+        let keyCode = e.keyCode || e.which || e.charCode;
+        if (keyCode === 13) {
+            sendMsg();
+            return false;
+        }
+    });
+
+    function sendMsg(){
+        if (!sessionStorage.userName) {
+            alert('不登录，不准发消息');
+            return;
+        }
+        let val = $('.chatwindow').html();
+        // ws.send(`${sessionStorage.userName}：${val}`);
+        ws.send(JSON.stringify({
+            userName: sessionStorage.userName,
+            msg: val,
+        }));
+        $(this).html('');
+    }
+
+    var ws = new WebSocket('ws://localhost:8000');
+    ws.onopen = function(e) {
+        console.log("连接服务器成功");
+    }
+    ws.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        // 处理数据
+        let htmlStr = `<div class="msg msgL">${data.userName}<span>${data.msg}</span></div>`;
+        if (data.userName === sessionStorage.userName) {
+            htmlStr = `<div class="msg msgR"><span>${data.msg}</span>${data.userName}</div>`;
+        }
+        $('.msgList').append(htmlStr);
+    };
+
+
+    //  [!@#$%^&()_<>]
+    var regFlag = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![!@#$%^&()_<>]+$)[0-9A-Za-z!@#$%^&()_<>]{8,16}$/.test('aaa2bbbb');
+    var str =
+        '<ol><li>50px<span style="font-size:32px"><span style="line-height:4"><strong><span style="color:#fdda00"><span style="letter-spacing:6px"><sup><u><em><span style="text-decoration:line-through">文本</span></em></u></sup></span></span></strong></span></span>🤣</li><li><a href="oooo" target="">oooo</a></li></ol>';
+    str = str.replace(/(\d+)(px)/gi, function() {
+        return arguments[1] / 100 + 'rem';
+    });
+</script>
+</body>
+</html>

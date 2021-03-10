@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^5.0.0-alpha.8",
-    "node-xlsx": "^0.15.0"
+    "node-xlsx": "^0.15.0",
+    "nodejs-websocket": "^1.7.2",
+    "socket.io": "^3.1.2"
   }
 }
