@@ -1,5 +1,6 @@
 let server = require('express');
 const bodyParser = require('body-parser');
+const { userRouter, blogRouter } = require('./routers');
 let app = server();
 const axios = require('axios');
 app.use(bodyParser.urlencoded({extended: false}));
@@ -17,6 +18,13 @@ app.use(
     })
 )
 
+// 添加用户路由到应用
+app.use('/user', userRouter);
+
+// 添加博客路由到应用
+app.use('/blog', blogRouter);
+
+// 举牌小人图片接口
 app.post('/api/getImg', (req, res) => {
     let data = req.body;
     // res.send({flag: "abc"});
@@ -34,6 +42,7 @@ app.get('/api/getImg', (req, res) => {
     getImg(data.data, res)
 });
 
+// 获取举牌小人图片
 const getImg = (val, resSend) => {
     const formData = new URLSearchParams();
     formData.append('t', val);
