@@ -3,12 +3,17 @@ let status_codes = require('_http_server').STATUS_CODES;
 let app = server();
 let fs = require('fs');
 const xlsx = require('node-xlsx');
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
+app.use(bodyParser.text());
 
 function readXls() {
     let list = xlsx.parse("./edu.xlsx");
     console.log(list);
 }
-writeXls();
+// writeXls();
 function writeXls() {
     let data = [];
     for (let i = 1; i < 900001; i++) {
